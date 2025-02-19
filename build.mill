@@ -1,0 +1,28 @@
+package build
+
+import mill.scalalib.bsp.BspBuildTarget
+import mill.scalalib.bsp.BspModule
+
+import mill._
+import scalalib._
+
+object foo extends ScalaModule {
+  def scalaVersion = "3.3.4"
+
+  def ivyDeps = Agg(
+    ivy"org.typelevel::cats-core:2.13.0"
+  )
+}
+
+object bar extends ScalaModule with BspModule  {
+  def scalaVersion = "3.3.4"
+
+  def ivyDeps = Agg(
+    ivy"org.typelevel::cats-effect:3.5.7"
+  )
+
+  override def bspBuildTarget: BspBuildTarget = {
+    val original = super.bspBuildTarget
+    original.copy(tags = original.tags :+ BspModule.Tag.NoIDE)
+  }
+}
